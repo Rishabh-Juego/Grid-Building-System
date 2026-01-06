@@ -29,3 +29,20 @@ System:
 8. The building placement is done in a 2D plane (X, Z) with Y being the height.
 9. Buildings can only be rotated in 90-degree increments along the Y-axis.
 10. I am using a Grid with Cell size of 5x5 units for Confirming no bias is left due to 1x1 or 2x2 which are common approaches.
+
+
+### Flow
+Creating a Building:
+1. Define the grid size and cell size in `GridBuildingConfig`.cs.
+2. Create a Building Modal prefab with `BuildingModel` and multiple `BuildingShapeUnit` components to define its shape.
+   1. Each `BuildingShapeUnit` should be positioned at the center of the grid cell it occupies.
+   2. The `BuildingModel` script should have a Wrapper which hold the building mesh and the `BuildingShapeUnit` components as children.
+3. Use `BuildingData`.cs to store information about the building, including a reference to the modal prefab.
+
+Placing a Building on the Grid:
+1. Use `BuildingPreview`.cs to visualize the building placement on the grid.
+   1. The preview should show the building at the mouse position, snapping to the nearest grid cell.
+   2. The preview should change color to indicate whether the placement is valid (e.g., green for valid, red for invalid).
+2. When the player confirms the placement, use `BuildingGrid`.cs to check if the building can be placed at the desired grid position.
+3. If the placement is valid, instantiate the building prefab at the grid position and update the grid cells to mark them as occupied (`BuildingGrid.SetBuilding()`).
+4. The new Building is placed on the grid and cannot overlap with existing buildings, We have a `Building` script on a prefab, the new building will be a child of this prefab.

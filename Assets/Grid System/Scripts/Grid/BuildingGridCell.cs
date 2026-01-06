@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace TGL.GridSystem.Grid
 {
+    /// <summary>
+    /// Data holder for each cell in the building grid.
+    /// </summary>
     public class BuildingGridCell
     {
         private Building building;

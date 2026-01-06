@@ -62,6 +62,11 @@ namespace TGL.GridSystem.Grid
             return true; // All positions are valid and unoccupied
         }
         
+        /// <summary>
+        /// Saves an instantiated building into the grid cells
+        /// </summary>
+        /// <param name="building">The instantiated building</param>
+        /// <param name="allBuildingPositions">the position this building occupies</param>
         public void SetBuilding(Building building, List<Vector3> allBuildingPositions)
         {
             foreach (var position in allBuildingPositions)

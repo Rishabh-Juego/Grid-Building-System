@@ -31,7 +31,7 @@ namespace TGL.GridSystem.Buildings
             shapeUnits = GetComponentsInChildren<BuildingShapeUnit>();
         }
         
-        public void RotateModel(float rotationStep)
+        public void RotateModel(int rotationStep)
         {
             modelWrapper.Rotate(Vector3.up, rotationStep);
             // modelWrapper.Rotate(0, rotationStep, 0);
