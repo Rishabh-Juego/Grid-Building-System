@@ -144,7 +144,6 @@ namespace TGL.GridSystem.placements
                 centerX = (xs.Min() + xs.Max()) / 2.0f;
             }
 
-            centerX += GridBuildingConfig.cellSize / 2.0f;
 
             if (zs.Count == 1)
             {
@@ -154,10 +153,19 @@ namespace TGL.GridSystem.placements
             {
                 centerZ = (zs.Min() + zs.Max()) / 2.0f;
             }
+            FindNearestGridPoint(ref centerX, ref centerZ, GridBuildingConfig.cellSize);
+            centerX += GridBuildingConfig.cellSize / 2.0f;
             centerZ += GridBuildingConfig.cellSize / 2.0f;
             
             return new Vector3(centerX, transform.position.y, centerZ);
         }
+        
+        private void FindNearestGridPoint(ref float centerX, ref float centerZ, float cellSize)
+        {
+            centerX = Mathf.Round(centerX / cellSize) * cellSize;
+            centerZ = Mathf.Round(centerZ / cellSize) * cellSize;
+        }
+        
 
         private void PlaceBuilding(List<Vector3> buildPosition)
         {
