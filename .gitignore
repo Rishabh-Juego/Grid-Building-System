@@ -1,0 +1,107 @@
+# ===============================================================
+# Unity Generated (Core & Temporary)
+# ===============================================================
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ibrary/
+/[Ll]ogs/
+/[Mm]emoryCaptures/
+/[Oo]bj/
+/[Rr]ecordings/
+/[Tt]emp/
+/[Uu]ser[Ss]ettings/
+.utmp/
+*.log
+*.tmp
+InitTestScene*.unity*
+UnityGenerated/
+
+# ===============================================================
+# Assets & Addressables
+# ===============================================================
+/[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+/[Aa]ssets/AddressableAssetsData/*/*.bin*
+/[Aa]ssets/AddressableAssetsData/link.xml*
+/[Aa]ssets/Addressables_Temp*
+/[Aa]ssets/Plugins/Editor/JetBrains*
+/[Aa]ssets/StreamingAssets/aa*
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers.meta
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta
+# Used when we store addressable data outside assets in a folder called 'ServerData'
+/ServerData
+
+# ===============================================================
+# IDE Specific (Visual Studio, VS Code, Rider)
+# ===============================================================
+.consulo/
+.idea/
+.vs/
+.vscode/
+*.booproj
+*.csproj
+*.DotSettings.user
+*.mdb
+*.mdb.meta
+*.opendb
+*.pdb
+*.pdb.meta
+*.pidb
+*.sln
+*.suo
+*.svd
+*.unityproj
+*.user
+*.userprefs
+*.VC.db
+/[Aa]ssets/Plugins/Editor/JetBrains*
+ExportedObj/
+
+# ===============================================================
+# Build Artifacts & Crash Reports
+# ===============================================================
+*.aab
+*.apk
+*.app
+*.unitypackage
+*.unitypackage.meta
+crashlytics-build.properties
+mono_crash.*
+mono_crash.*.json
+sysinfo.txt
+
+# ===============================================================
+# OS Generated (macOS & Windows)
+# ===============================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Icon?
+Thumbs.db
+ZZZ_Trash
+ZZZ_Trash.meta
+
+# ===============================================================
+# Project Specific (Firebase, Reports, etc.)
+# ===============================================================
+Assets/BuildReport
+Assets/BuildReport.meta
+Assets/BuildReports
+Assets/BuildReports.meta
+Assets/Firebase/Plugins/x86_64/FirebaseCppApp-*
+Assets/Firebase\ Details/
+Assets/StreamingAssets/build_info
+Assets/StreamingAssets/google-services-desktop.json
+Assets/StreamingAssets/google-services-desktop.json.meta
+
+# ===============================================================
+# External Tools (Optional)
+# ===============================================================
+.gradle/
+*.blend1
+*.blend1.meta
+# /[Aa]ssets/AssetStoreTools*
