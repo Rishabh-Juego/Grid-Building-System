@@ -29,6 +29,8 @@ System:
 8. The building placement is done in a 2D plane (X, Z) with Y being the height.
 9. Buildings can only be rotated in 90-degree increments along the Y-axis.
 10. I am using a Grid with Cell size of 5x5 units for Confirming no bias is left due to 1x1 or 2x2 which are common approaches.
+11. The Grid is placed at world origin (0,0,0) and extends positively in the X and Z directions.
+12. The collider is added to Layer "Grid"(6 in layerMask) for raycasting purposes.
 
 
 ### Flow

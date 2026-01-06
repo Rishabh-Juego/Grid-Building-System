@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 694651552824617319}
+  - component: {fileID: 8584164373485230488}
   m_Layer: 0
-  m_Name: BuildingShapeUnit
+  m_Name: BuildingShapeUnit 01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,6 +32,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1812081261415595520}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8584164373485230488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763966795905413890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b3220d2b97441d2a935d927e0fe385, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5422382221775484969
 GameObject:
   m_ObjectHideFlags: 0

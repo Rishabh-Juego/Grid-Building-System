@@ -9,6 +9,8 @@ namespace TGL.GridSystem.config
     {
         public const float cellSize = 5f;
         public const int rotateStep = 90;
-
+        // gridLayerMask has name "Grid" and value 6 in the layer table
+        //public static LayerMask GridLayerMask = 1 << 6;
+        public static LayerMask gridLayerMask = LayerMask.GetMask("Grid");
     }
 }

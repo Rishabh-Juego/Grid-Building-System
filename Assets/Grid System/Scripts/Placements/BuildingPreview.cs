@@ -21,6 +21,7 @@ namespace TGL.GridSystem.placements
     	[SerializeField] private Material negativeMaterial;
     	public BuildingPreviewState previewState{get; private set;} = BuildingPreviewState.NEGATIVE;
     	public BuildingData Data {get; private set;}
+	    public BuildingModel Model => model;
 	    
     	// Colliders and renderers
     	private List<Collider> colliders = new ();

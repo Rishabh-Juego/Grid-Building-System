@@ -14,7 +14,15 @@ namespace TGL.GridSystem.config
         [Tooltip("Degrees we move for a single rotation"), Range(0, 180)]
         public int rotateStep = 90;
         
-        public Material positiveMaterial;
-        public Material negativeMaterial;
+        /// <summary>
+        /// Positive and Negative Materials for Grid Cell Visualization
+        /// </summary>
+        [Tooltip("The material to use when preview allows for building placement")] public Material positiveMaterial;
+        [Tooltip("The material to use then preview block for building placement")] public Material negativeMaterial;
+
+        /// <summary>
+        /// The Collider layer for the grid
+        /// </summary>
+        [Tooltip("The Collider Layer for the grid")]public LayerMask gridLayerMask;
     }
 }
