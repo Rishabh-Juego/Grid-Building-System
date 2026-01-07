@@ -2,21 +2,29 @@
 Project to make a Grid Building System for placing buildings in a grid
 
 ###### Scripts
-Model:
+Core Scripts:
+shape data:
 - `BuildingShapeUnit` - empty script for building shape unit, used for identifying building shape inside Wrapper.
   - using `BuildingShapeUnit` as a component on a GameObject will allow you to define the shape of the building in the grid without calculating x and y, this also helps when we want shapes beyond square and rectangle.
   - each `BuildingShapeUnit` represents one grid cell occupied by the building, it should be placed at the center of the grid position.
-- `BuildingModel`.cs - script for building model, gives access to building mesh inside Wrapper.
+  - Gizmos are used to visualize the shape units in the editor.
+- `BuildingModel`.cs - script for building model, gives access to building mesh inside Wrapper so we can rotate and position it correctly.
 Grid:
-- `BuildingGrid`.cs - main grid script for managing grid cells and building placement.
+- `BuildingGrid`.cs - main grid script for creating grid cells by defining width and height. Manages grid cell data when placing buildings.
 - `BuildingGridCell`.cs - Cell data structure for individual grid cells.
-Building Placement:
-- `BuildingData`.cs - data structure for building information, including the prefab of the building. Can be used to instantiate buildings on the grid.
-- `BuildingPreview`.cs - script for previewing building placement on the grid.
-System:
+Building:
+- `Building`.cs - script for placed building on the grid, when a building is placed, we do not want to keep it directly, so this script acts as a common parent prefab for all buildings.
+- `BuildingArt`.cs - Actual art of the building. This is empty and used for identification purposes.
+- `BuildingData`.cs - scriptable object for building information, including the prefab of the building. Can be used to instantiate buildings on the grid.
+- `Wrapper`.cs - script for handling building model rotation and position adjustments based on grid alignment.
+- `AngledPosition`.cs - helper script for handling position adjustments when buildings are rotated at angles.
+Placement:
+- `BuildingPreview`.cs - script for previewing building placement on the grid. All colliders are disabled for this prefab and renderers are all using a configured material depending on placement.
+- `BuildingSystem`.cs - main script for handling building placement logic, including raycasting, validating placement, and finalizing building placement on the grid.
+  config:
 - `GridBuildingConfig`.cs - configuration file for grid building system.
-- `GridBuildingConfig2`.cs - In future we can have multiple configurations for different grid types.
-- 
+- `GridBuildingConfig2`.cs - In future we can have multiple configurations for different grid types. Currently not in use.
+
 
 ## Assumptions:
 1. The grid is made of square cells.
@@ -34,6 +42,8 @@ System:
 10. I am using a Grid with Cell size of 5x5 units for Confirming no bias is left due to 1x1 or 2x2 which are common approaches.
 11. The Grid is placed at world origin (0,0,0) and extends positively in the X and Z directions.
 12. The collider is added to Layer "Grid"(6 in layerMask) for raycasting purposes.
+13. All objects are aligned to world axes, no rotation happens except for buildings in Y axis. 
+    1. scripts like Wrapper assume this, if we want to rotate the grid or collider, we need to adjust the scripts accordingly.
 
 
 ### How to Use the Grid Building System
@@ -51,6 +61,7 @@ System:
    2. The "Building Modal" should have a Wrapper GameObject as a child to hold the building art mesh.
       1. This Wrapper GameObject should be positioned in a way that allows easy rotation and alignment with the grid, for some buildings it might be at center of the building area and for others it might be an edge of the grid cell based on the building art.
          1. It can be placed in center of cell, but not necessary, as long as the building art continues to align with the grid cells occupied by the building shape units.
+         2. We can also populate the wrapper script variables to help with position changes with specific rotation if needed.
       2. We rotate the wrapper to align the building art correctly with the grid when user chooses to rotate the building.
       3. Try to keep it so that after all possible rotations, the building shape units still align with the center of grid cells.
    3. Add the "building art" as a child of the Wrapper GameObject, so it is visually represented in the scene.
@@ -76,3 +87,5 @@ System:
 7. The new Building is placed on the grid and cannot overlap with existing buildings. 
    1. The new building will be a child of `Building`.cs script prefab.
 8. 
+
+

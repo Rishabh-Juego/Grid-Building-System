@@ -18,8 +18,9 @@ namespace TGL.GridSystem.Buildings
         /// <summary>
         /// The model wrapper to rotate the building model, not the entire game object
         /// </summary>
-        [SerializeField] private Transform modelWrapper;
-        public float RotationY { get => modelWrapper.localEulerAngles.y; }
+        [SerializeField] private Wrapper modelWrapper;
+        public float RotationY { get => modelWrapper.transform.localEulerAngles.y; }
+        public int currRotation;
         
         /// <summary>
         /// points that this building occupies in the grid
@@ -33,8 +34,14 @@ namespace TGL.GridSystem.Buildings
         
         public void RotateModel(int rotationStep)
         {
-            modelWrapper.Rotate(Vector3.up, rotationStep);
+            // modelWrapper.Rotate(Vector3.up, rotationStep);
             // modelWrapper.Rotate(0, rotationStep, 0);
+            currRotation += rotationStep;
+            if (currRotation >= 360)
+            {
+                currRotation -= 360;
+            }
+            modelWrapper.SetRotation(currRotation);
         }
         
         public List<Vector3> GetAllBuildingShapePositions()

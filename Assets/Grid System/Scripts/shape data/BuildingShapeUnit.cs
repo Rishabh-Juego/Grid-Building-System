@@ -11,12 +11,14 @@ namespace TGL.GridSystem.Buildings
     public class BuildingShapeUnit : MonoBehaviour
     {
 #if UNITY_EDITOR
+        [SerializeField] private bool isPivot;
         private const float CIRCLE_RADIUS = 0.5f;
         private static readonly Color gizmoColor = Color.black;
+        private static readonly Color gizmoPivotColor = Color.red;
 
         private void OnDrawGizmos()
         {
-            Handles.color = gizmoColor;
+            Handles.color = isPivot? gizmoPivotColor : gizmoColor;
             Handles.DrawSolidDisc(transform.position, Vector3.up, CIRCLE_RADIUS);
         }
 #endif

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TGL.GridSystem.Buildings;
-using TGL.GridSystem.Buildings.UnSure;
 using TGL.GridSystem.config;
 using TGL.GridSystem.Grid;
 using UnityEngine;
@@ -112,7 +111,7 @@ namespace TGL.GridSystem.placements
                 #endif
                 return;
             }
-            bool canBuild = buildingGrid.CanBuild(buildPositions);
+            bool canBuild = buildingGrid.CanBuild(buildPositions, false);
             if(Input.GetKeyDown(KeyCode.R)) // 'R' key on Keyboard
             {
                 buildingPreviewInstance.Model.RotateModel(GridBuildingConfig.rotateStep);
@@ -123,6 +122,7 @@ namespace TGL.GridSystem.placements
                 buildingPreviewInstance.ChangeState(BuildingPreview.BuildingPreviewState.POSITIVE);
                 if (Input.GetMouseButtonDown(0)) // mouse Down
                 {
+                    buildingGrid.CanBuild(buildPositions, true);
                     // place the building
                     Debug.Log($"Placing the building at - preview pos: {buildingPreviewInstance.transform.position}");
                     PlaceBuilding(buildPositions);

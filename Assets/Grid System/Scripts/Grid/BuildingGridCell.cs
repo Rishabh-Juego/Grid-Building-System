@@ -1,4 +1,4 @@
-using TGL.GridSystem.Buildings.UnSure;
+using TGL.GridSystem.placements;
 using UnityEngine;
 
 namespace TGL.GridSystem.Grid

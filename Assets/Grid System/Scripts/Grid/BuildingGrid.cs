@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using TGL.GridSystem.Buildings.UnSure;
+using System.Linq;
 using TGL.GridSystem.config;
+using TGL.GridSystem.placements;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -60,7 +61,7 @@ namespace TGL.GridSystem.Grid
             return  lowerEdgeOfCell;
         }
         
-        public bool CanBuild(List<Vector3> allBuildingPositions)
+        public bool CanBuild(List<Vector3> allBuildingPositions, bool showLogs)
         {
             foreach (var position in allBuildingPositions)
             {
@@ -77,6 +78,13 @@ namespace TGL.GridSystem.Grid
                     return false; // Cell is occupied
                 }
             }
+
+            if (showLogs)
+            {
+                Debug.Log($"Checked positions are valid and unoccupied." + string.Join(", ", allBuildingPositions.Select(pos => $"({pos.x:00}, {pos.y:00}, {pos.z:00})")));
+                Debug.Log($"The Grid Positions are: " + string.Join(", ", allBuildingPositions.Select(pos => $"({WorldToGridPosition(pos).x}, {WorldToGridPosition(pos).y})")));
+            }
+            
             return true; // All positions are valid and unoccupied
         }
         

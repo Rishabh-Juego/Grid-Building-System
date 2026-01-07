@@ -1,6 +1,7 @@
+using TGL.GridSystem.Buildings;
 using UnityEngine;
 
-namespace TGL.GridSystem.Buildings.UnSure
+namespace TGL.GridSystem.placements
 {
     /// <summary>
     /// Details and references for a building instance in the grid system.
@@ -15,7 +16,8 @@ namespace TGL.GridSystem.Buildings.UnSure
         public void Setup(BuildingData data, int rotationAngle)
         {
             this.data = data;
-            model = Instantiate(data.Model, transform.position, Quaternion.Euler(0, rotationAngle, 0), transform);
+            model = Instantiate(data.Model, transform.position, Quaternion.identity, transform);
+            model.RotateModel(rotationAngle);
         }
     }
 }

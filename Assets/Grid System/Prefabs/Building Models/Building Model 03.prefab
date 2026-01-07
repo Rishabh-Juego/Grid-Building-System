@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00b3220d2b97441d2a935d927e0fe385, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPivot: 1
 --- !u!1 &2199496740039687183
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,6 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00b3220d2b97441d2a935d927e0fe385, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPivot: 0
 --- !u!1 &4763845070078479709
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,7 +136,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingName: Building 03
-  modelWrapper: {fileID: 4040156646164193868}
+  modelWrapper: {fileID: 2667236593157383889}
+  currRotation: 0
 --- !u!1 &5035988987903604275
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,6 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00b3220d2b97441d2a935d927e0fe385, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPivot: 0
 --- !u!1 &6219930632032756358
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,6 +231,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c82ac44fc5a194084bd4586b2266f21d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  angledPositionData:
+  - angleY: 0
+    positionAtAngleY: {x: 5, y: 0, z: 5}
+  - angleY: 90
+    positionAtAngleY: {x: 5, y: 0, z: 0}
+  - angleY: 180
+    positionAtAngleY: {x: 0, y: 0, z: 0}
+  - angleY: 270
+    positionAtAngleY: {x: 0, y: 0, z: 5}
+  initialRotation: {x: 0, y: 0, z: 0}
 --- !u!1001 &4127329317290769030
 PrefabInstance:
   m_ObjectHideFlags: 0
