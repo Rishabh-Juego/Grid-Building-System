@@ -12,3 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2993a2d42eb7444368c9431dfb1909dc, type: 3}
   m_Name: GridBuildingConfig
   m_EditorClassIdentifier: 
+  cellSize: 5
+  rotateStep: 90
+  positiveMaterial: {fileID: 2100000, guid: ad366b417cce14682b81e142692fd622, type: 2}
+  negativeMaterial: {fileID: 2100000, guid: af047bc585e6947d6a0451037df42ac7, type: 2}
+  gridLayerMask:
+    serializedVersion: 2
+    m_Bits: 64

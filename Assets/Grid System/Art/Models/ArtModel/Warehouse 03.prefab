@@ -757,6 +757,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6766159369330587065}
+  - component: {fileID: 5376678926810727671}
   m_Layer: 0
   m_Name: Warehouse 03
   m_TagString: Untagged
@@ -782,6 +783,18 @@ Transform:
   - {fileID: 1587078761479590779}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5376678926810727671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5014471434249831513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6952b0f2f3ffc431e8c9685593a38f5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5415016303792276052
 GameObject:
   m_ObjectHideFlags: 0

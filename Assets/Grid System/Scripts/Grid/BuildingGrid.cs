@@ -4,6 +4,10 @@ using TGL.GridSystem.Buildings.UnSure;
 using TGL.GridSystem.config;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace TGL.GridSystem.Grid
 {
     /// <summary>
@@ -36,11 +40,24 @@ namespace TGL.GridSystem.Grid
             }
         }
         
+        /// <summary>
+        /// Uses FloorToInt to convert world position to grid position
+        /// FloorToInt is used to ensure that any position within a cell maps to that cell's grid coordinates without exceeding bounds of the building due to non-uniform shapes.
+        /// </summary>
+        /// <param name="worldPosition"></param>
+        /// <returns></returns>
         public Vector2Int WorldToGridPosition(Vector3 worldPosition)
         {
             int x = Mathf.FloorToInt((worldPosition - transform.position).x / GridBuildingConfig.cellSize);
             int z = Mathf.FloorToInt((worldPosition - transform.position).z / GridBuildingConfig.cellSize);
             return new Vector2Int(x, z);
+        }
+
+        public Vector3 GetCellLowerEdgePos(Vector3 worldPosition)
+        {
+            Vector2Int cellNum = WorldToGridPosition(worldPosition);
+            Vector3 lowerEdgeOfCell = new Vector3(cellNum.x * GridBuildingConfig.cellSize, 0, cellNum.y * GridBuildingConfig.cellSize);
+            return  lowerEdgeOfCell;
         }
         
         public bool CanBuild(List<Vector3> allBuildingPositions)
@@ -51,8 +68,9 @@ namespace TGL.GridSystem.Grid
                 // Check if the position is within bounds
                 if (gridPosition.x < 0 || gridPosition.x >= width || gridPosition.y < 0 || gridPosition.y >= height)
                 {
-                    return false; // Out of bounds
+                    return false; // Out of grid bounds
                 }
+                
                 // Check if the cell is already occupied
                 if (!grid[gridPosition.x, gridPosition.y].IsEmpty())
                 {
@@ -76,9 +94,10 @@ namespace TGL.GridSystem.Grid
             }
         }
 
-        private void OnDrawGizmos()
+        /*private void OnDrawGizmos()
         {
             Gizmos.color = Color.yellow;
+            float gizmoWidth = 0.5f;
             if(GridBuildingConfig.cellSize <= 0 || width <= 0 || height <= 0) return;
             Vector3 origin = transform.position;
             for(int y = 0; y <= height; y++)
@@ -94,6 +113,100 @@ namespace TGL.GridSystem.Grid
                 Vector3 endPos = origin + new Vector3(x * GridBuildingConfig.cellSize, 0.01f, height * GridBuildingConfig.cellSize);
                 Gizmos.DrawLine(startPos, endPos);
             }
+        }*/
+        
+        /*
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+            float gizmoWidth = 0.5f;
+            float gizmoY = 0.01f;
+            if (GridBuildingConfig.cellSize <= 0 || width <= 0 || height <= 0) return;
+            Vector3 origin = transform.position;
+
+            // Draw horizontal lines (rows)
+            for (int y = 0; y <= height; y++)
+            {
+                Vector3 startPos = origin + new Vector3(0, gizmoY, y * GridBuildingConfig.cellSize);
+                Vector3 endPos = origin + new Vector3(width * GridBuildingConfig.cellSize, gizmoY, y * GridBuildingConfig.cellSize);
+                Vector3 center = (startPos + endPos) / 2f;
+                float length = Vector3.Distance(startPos, endPos);
+                Vector3 size = new Vector3(length, gizmoY, gizmoWidth); // X: length, Y: thin, Z: thickness
+                Quaternion rotation = Quaternion.identity; // No rotation needed for horizontal lines
+                Gizmos.matrix = Matrix4x4.TRS(center, rotation, Vector3.one);
+                Gizmos.DrawCube(Vector3.zero, size);
+                Gizmos.matrix = Matrix4x4.identity;
+            }
+
+            // Draw vertical lines (columns)
+            for (int x = 0; x <= width; x++)
+            {
+                Vector3 startPos = origin + new Vector3(x * GridBuildingConfig.cellSize, gizmoY, 0);
+                Vector3 endPos = origin + new Vector3(x * GridBuildingConfig.cellSize, gizmoY, height * GridBuildingConfig.cellSize);
+                Vector3 center = (startPos + endPos) / 2f;
+                float length = Vector3.Distance(startPos, endPos);
+                Vector3 size = new Vector3(gizmoWidth, gizmoY, length); // X: thickness, Y: thin, Z: length
+                Quaternion rotation = Quaternion.identity; // No rotation needed for vertical lines
+                Gizmos.matrix = Matrix4x4.TRS(center, rotation, Vector3.one);
+                Gizmos.DrawCube(Vector3.zero, size);
+                Gizmos.matrix = Matrix4x4.identity;
+            }
         }
+        */
+        
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+            float gizmoWidth = 0.5f;
+            float gizmoY = 0.01f;
+            if (GridBuildingConfig.cellSize <= 0 || width <= 0 || height <= 0) return;
+            Vector3 origin = transform.position;
+        
+            // Draw horizontal lines (rows)
+            for (int y = 0; y <= height; y++)
+            {
+                Vector3 startPos = origin + new Vector3(0, gizmoY, y * GridBuildingConfig.cellSize);
+                Vector3 endPos = origin + new Vector3(width * GridBuildingConfig.cellSize, gizmoY, y * GridBuildingConfig.cellSize);
+                Vector3 center = (startPos + endPos) / 2f;
+                float length = Vector3.Distance(startPos, endPos);
+                Vector3 size = new Vector3(length, gizmoY, gizmoWidth);
+                Quaternion rotation = Quaternion.identity;
+                Gizmos.matrix = Matrix4x4.TRS(center, rotation, Vector3.one);
+                Gizmos.DrawCube(Vector3.zero, size);
+                Gizmos.matrix = Matrix4x4.identity;
+            }
+        
+            // Draw vertical lines (columns)
+            for (int x = 0; x <= width; x++)
+            {
+                Vector3 startPos = origin + new Vector3(x * GridBuildingConfig.cellSize, gizmoY, 0);
+                Vector3 endPos = origin + new Vector3(x * GridBuildingConfig.cellSize, gizmoY, height * GridBuildingConfig.cellSize);
+                Vector3 center = (startPos + endPos) / 2f;
+                float length = Vector3.Distance(startPos, endPos);
+                Vector3 size = new Vector3(gizmoWidth, gizmoY, length);
+                Quaternion rotation = Quaternion.identity;
+                Gizmos.matrix = Matrix4x4.TRS(center, rotation, Vector3.one);
+                Gizmos.DrawCube(Vector3.zero, size);
+                Gizmos.matrix = Matrix4x4.identity;
+            }
+        
+        #if UNITY_EDITOR
+            // Draw cell indices
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    Vector3 cellCenter = origin + new Vector3(
+                        (x + 0.5f) * GridBuildingConfig.cellSize,
+                        gizmoY,
+                        (y + 0.5f) * GridBuildingConfig.cellSize
+                    );
+                    Handles.Label(cellCenter, $"({x},{y})");
+                }
+            }
+        #endif
+        }
+        
+
     }
 }

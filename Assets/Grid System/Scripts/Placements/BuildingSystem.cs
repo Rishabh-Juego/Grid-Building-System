@@ -15,14 +15,17 @@ namespace TGL.GridSystem.placements
         [Header("Buildings"), SerializeField] private BuildingData buildingData1;
         [SerializeField] private BuildingData buildingData2;
         [SerializeField] private BuildingData buildingData3;
-        [Header("system"), SerializeField] private BuildingPreview buildingPreviewPrefab;
-        [SerializeField] private Building buildingPrefab;
+        
+        [Header("Scene References"), SerializeField] private Camera cam;
         [SerializeField] private BuildingGrid buildingGrid;
-        [Header("Camera"), SerializeField] private Camera cam;
+        
+        [Header("Prefabs"), SerializeField] private BuildingPreview buildingPreviewPrefab;
+        [SerializeField] private Building buildingPrefab;
         
         private BuildingPreview buildingPreviewInstance;
         Vector3 mouseWorldPosition;
         private List<Vector3> buildPositions;
+        private Ray mouseRay;
 
         private List<float> xs, zs;
         float centerX, centerZ;
@@ -67,23 +70,23 @@ namespace TGL.GridSystem.placements
         private Vector3 GetMouseGridWorldPosition()
         {
             // GridBuildingConfig.gridLayerMask can be used here for better accuracy
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            mouseRay = cam.ScreenPointToRay(Input.mousePosition);
             if (GridBuildingConfig.gridLayerMask != 0) // using colliders on the grid at specified layer mask
             {
-                if (Physics.Raycast(ray, out RaycastHit hitInfo, maxDistance: Mathf.Infinity, GridBuildingConfig.gridLayerMask))
+                if (Physics.Raycast(mouseRay, out RaycastHit hitInfo, maxDistance: Mathf.Infinity, GridBuildingConfig.gridLayerMask))
                 {
                     return hitInfo.point;
                 }
             }
             else
             {
-                Debug.LogWarning($"Did we not create a collider and assign it to the layer mask {GridBuildingConfig.gridLayerMask}? we are assuming Building system as the start point and this may give wrong results");
+                // Debug.LogWarning($"Did we not create a collider and assign it to the layer mask {GridBuildingConfig.gridLayerMask}? we are assuming Building system as the start point and this may give wrong results");
                 // create a plane at y = transform.position.y with normal pointing up
                 Plane gridPlane = new Plane(Vector3.up, transform.position);
                 // raycast against the plane, if we can get a hit, return the point of intersection
-                if (gridPlane.Raycast(ray, out float distance))
+                if (gridPlane.Raycast(mouseRay, out float distance))
                 {
-                    return ray.GetPoint(distance);
+                    return mouseRay.GetPoint(distance);
                 }
             }
 
@@ -99,7 +102,7 @@ namespace TGL.GridSystem.placements
 
         private void HandlePreview(Vector3 mousePos)
         {
-            buildingPreviewInstance.transform.position = mousePos;
+            buildingPreviewInstance.transform.position = buildingGrid.GetCellLowerEdgePos(mousePos);
             buildPositions = buildingPreviewInstance.Model.GetAllBuildingShapePositions();
             if(buildPositions.Count == 0)
             {
@@ -116,7 +119,7 @@ namespace TGL.GridSystem.placements
             }
             if (canBuild)
             {
-                buildingPreviewInstance.transform.position = GetSnappedCenterPosition(buildPositions);
+                //buildingPreviewInstance.transform.position = GetSnappedCenterPosition(buildPositions);
                 buildingPreviewInstance.ChangeState(BuildingPreview.BuildingPreviewState.POSITIVE);
                 if (Input.GetMouseButtonDown(0)) // mouse Down
                 {
@@ -154,8 +157,8 @@ namespace TGL.GridSystem.placements
                 centerZ = (zs.Min() + zs.Max()) / 2.0f;
             }
             FindNearestGridPoint(ref centerX, ref centerZ, GridBuildingConfig.cellSize);
-            centerX += GridBuildingConfig.cellSize / 2.0f;
-            centerZ += GridBuildingConfig.cellSize / 2.0f;
+            // centerX += GridBuildingConfig.cellSize / 2.0f;
+            // centerZ += GridBuildingConfig.cellSize / 2.0f;
             
             return new Vector3(centerX, transform.position.y, centerZ);
         }
@@ -174,6 +177,15 @@ namespace TGL.GridSystem.placements
             buildingGrid.SetBuilding(building, buildPosition);
             Destroy(buildingPreviewInstance.gameObject);
             buildingPreviewInstance = null;
+        }
+        
+        private void OnDrawGizmos()
+        {
+            if (mouseRay.direction != Vector3.zero)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawRay(mouseRay.origin, mouseRay.direction * 100f);
+            }
         }
     }
 }
