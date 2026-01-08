@@ -103,6 +103,8 @@ namespace TGL.GridSystem.placements
         {
             buildingPreviewInstance.transform.position = buildingGrid.GetCellLowerEdgePos(mousePos);
             buildPositions = buildingPreviewInstance.Model.GetAllBuildingShapePositions();
+            
+            // validate
             if(buildPositions.Count == 0)
             {
                 Debug.LogError("No building shape positions found in the building model", buildingPreviewInstance);
@@ -112,63 +114,36 @@ namespace TGL.GridSystem.placements
                 return;
             }
             bool canBuild = buildingGrid.CanBuild(buildPositions, false);
+            
+            // Rotate or Cancel the building preview
             if(Input.GetKeyDown(KeyCode.R)) // 'R' key on Keyboard
             {
                 buildingPreviewInstance.Model.RotateModel(GridBuildingConfig.rotateStep);
             }
-            if (canBuild)
+            else if(Input.GetMouseButtonDown(1)) // Right mouse Down 
             {
-                //buildingPreviewInstance.transform.position = GetSnappedCenterPosition(buildPositions);
-                buildingPreviewInstance.ChangeState(BuildingPreview.BuildingPreviewState.POSITIVE);
-                if (Input.GetMouseButtonDown(0)) // mouse Down
+                Destroy(buildingPreviewInstance.gameObject);
+                buildingPreviewInstance = null;
+            }
+            
+            if (Input.GetMouseButtonDown(0)) // left mouse Down
+            {
+                if (canBuild)
                 {
                     buildingGrid.CanBuild(buildPositions, true);
                     // place the building
                     Debug.Log($"Placing the building at - preview pos: {buildingPreviewInstance.transform.position}");
                     PlaceBuilding(buildPositions);
                 }
-            }
-            else
-            {
-                buildingPreviewInstance.ChangeState(BuildingPreview.BuildingPreviewState.NEGATIVE);
-            }
-        }
-
-        private Vector3 GetSnappedCenterPosition(List<Vector3> allbuildingPositions)
-        {
-            xs = allbuildingPositions.Select(p => p.x).ToList();
-            zs = allbuildingPositions.Select(p => p.z).ToList();
-            if (xs.Count == 1)
-            {
-                centerX = xs[0];
-            }
-            else
-            {
-                centerX = (xs.Min() + xs.Max()) / 2.0f;
+                else
+                {
+                    Debug.LogWarning($"Cannot build at the current position - preview pos: {buildingPreviewInstance.transform.position}", buildingPreviewInstance);
+                }
             }
 
-
-            if (zs.Count == 1)
-            {
-                centerZ = zs[0];
-            }
-            else
-            {
-                centerZ = (zs.Min() + zs.Max()) / 2.0f;
-            }
-            FindNearestGridPoint(ref centerX, ref centerZ, GridBuildingConfig.cellSize);
-            // centerX += GridBuildingConfig.cellSize / 2.0f;
-            // centerZ += GridBuildingConfig.cellSize / 2.0f;
-            
-            return new Vector3(centerX, transform.position.y, centerZ);
+            //buildingPreviewInstance.transform.position = GetSnappedCenterPosition(buildPositions);
+            buildingPreviewInstance.ChangeState(canBuild ? BuildingPreview.BuildingPreviewState.POSITIVE : BuildingPreview.BuildingPreviewState.NEGATIVE);
         }
-        
-        private void FindNearestGridPoint(ref float centerX, ref float centerZ, float cellSize)
-        {
-            centerX = Mathf.Round(centerX / cellSize) * cellSize;
-            centerZ = Mathf.Round(centerZ / cellSize) * cellSize;
-        }
-        
 
         private void PlaceBuilding(List<Vector3> buildPosition)
         {

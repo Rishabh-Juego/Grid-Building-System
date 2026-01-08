@@ -46,7 +46,7 @@ Placement:
     1. scripts like Wrapper assume this, if we want to rotate the grid or collider, we need to adjust the scripts accordingly.
 
 
-### How to Use the Grid Building System
+## How to Use the Grid Building System
 #### Creating a Grid:
 1. We have 2 ways to create a grid, either by using a plane at a certain height and calculating data based on this height or by creating a collider and using raycasting to get the grid position.
 2. The Grid we make is visible in editor using Gizmo but not in the game build, so we can use a plane or a collider for raycasting.
@@ -86,6 +86,36 @@ Placement:
 6. If the placement is valid, instantiate the building prefab at the grid position and update the grid cells to mark them as occupied (`BuildingGrid.SetBuilding()`).
 7. The new Building is placed on the grid and cannot overlap with existing buildings. 
    1. The new building will be a child of `Building`.cs script prefab.
-8. 
+
+## Shaders
+we are using "Shader Graph"(`com.unity.shadergraph`) to create shaders for grid using the sample "Procedural Patterns" from Unity which has "Grid" Node.
+Assuming you have a fixed size grid, we now design a shader graph to let us make the grid visible to the user using a plane/quad in 3d objects.
+**Create** -> **Shader Graph** -> **URP** -> **Unlit Shader Graph** -> name it ["GridShader"](Assets/Grid System/Art/Shaders/GridShader.shadergraph):
+- Add "Grid" Node - This allows us to define the Grid size, the number of lines in x and y(tiling) and offset(if needed)
+- output of "Grid" goes to "One Minus" node, allowing us to get all lines without any cell data.
+- **Graph inspector** -> **Graph Setting** -> **Surface type** -> *Transparent* -> this allows us to set the mode to transparent
+- Take the output of the "One Minus" node and attach it to the input("Base Color" and "Alpha(1)") for our "Fragment" Node.
+    - This makes the shader output the grid and alpha ensures we ignore all black areas.
+- For better understanding, in "Main Preview" Change to "Quad" to see the grid on a plane surface.
+- Now we want some exposed values(visible in inspector) which will allow us to change the shader data.
+    - Vector2 - `CellsCoveredInUnitScale` - (2, 2)
+        - How many cells do we cover when we use a 3d "Plane" without any changes (2x2) when the cells are of 5 units of unity scale
+        - How many cells do we cover when we use a 3d "Quad" without any changes (0.2x0.2) when the cells are of 5 units of unity scale
+    - Color - `GridColor` - per material - White color with max alpha
+    - Vector2 - `NumberOfCellsInEachGrid` - (1, 1)
+        - How many cells we want in a cell - *This feels redundant if your cell size is bigger then one unit of unity space.*
+    - float - `Thickness` - Mode is Slider(to avoid any random values) - min: 0.01, max:0.1, default:0.1
+- Now that we have 4 exposed variables to set our data, we also need the scale of the object to identify the range (size of grid which determines the cell count in the shader), so we add another node called "Object" which helps us get the scale of the object.
+    - We are not using "Transform" node as it is used to change coordinate space and get a vector 3 in a new coordinate space and not provide us with the actual transform component in a game object.
+- using "Split", get the x and z scale and using "Vector 2" node, make it into a vector 2 number which can then be multiplied("Multiply") by our 'CellsCoveredInUnitScale' to find the number of cells our shader needs to show.
+    - So 'CellsCoveredInUnitScale' tells us the number of cells we are covering in local scale of (1,1,1), multiplying this number to the actual scale of the object will tell us how many cells we can show on the plane/quad.
+- In most cases, earlier part would have sufficed, but Let's say we want to show each grid as a set of AxB grid, or we want multiple grids to make a single grid cell, to achieve this, we defined a 'NumberOfCellsInEachGrid' variable. For this we "multiply" the output of previous node with our 'NumberOfCellsInEachGrid' blackboard variable and then we can pass this graph's output to *tiling* input channel in the "Grid" Node
+    - This ensures that if we want to visually divide the cells to show more finer(smaller) grid, we can keep a value greater than one, and cells appear smaller than our calculated grid, similarly for less than 1 value, the cells may be bigger than the cells we calculated.
+- Now, we want to set the thickness and color:
+    - so for thickness, thickness of line is opposite of the cell size, so in "Grid" node, we need the difference between 1 and thickness to get the cell thickness which equates to line thickness. To do this, we use "One Minus" node with 'Thickness' and push this to "Grid" node's *Size* channel.
+    - For Color, want the color to be the 'GridColor' which is then passed to "Multiply" node along with the output of the "Grid"->"One Minus"'s output channel, this gives the same output but colored in 'GridColor' which can then be passed to "Fragment" node's *Base Color* channel.
+
+This concludes the shader graph for grid visualization, I have renamed the variables in the shader graph to match the funtionality for better understanding, you can use any other name if needed.
+
 
 

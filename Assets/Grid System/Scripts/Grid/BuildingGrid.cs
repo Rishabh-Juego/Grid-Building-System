@@ -29,6 +29,13 @@ namespace TGL.GridSystem.Grid
         /// </summary>
         private BuildingGridCell[,] grid;
         
+        #if UNITY_EDITOR
+        [Space(15), Header("Gizmos Settings")]
+        public Color gizmosColor = Color.yellow;
+        public float gizmoWidth = 0.5f;
+        public float gizmoY = 0.01f;
+        #endif
+        
         private void Start()
         {
             grid = new BuildingGridCell[width, height];
@@ -101,72 +108,10 @@ namespace TGL.GridSystem.Grid
                 grid[gridPosition.x, gridPosition.y].SetBuilding(building);
             }
         }
-
-        /*private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.yellow;
-            float gizmoWidth = 0.5f;
-            if(GridBuildingConfig.cellSize <= 0 || width <= 0 || height <= 0) return;
-            Vector3 origin = transform.position;
-            for(int y = 0; y <= height; y++)
-            {
-                Vector3 startPos = origin + new Vector3(0, 0.01f, y * GridBuildingConfig.cellSize);
-                Vector3 endPos = origin + new Vector3(width * GridBuildingConfig.cellSize, 0.01f, y * GridBuildingConfig.cellSize);
-                Gizmos.DrawLine(startPos, endPos);
-            }
-
-            for (int x = 0; x <= width; x++)
-            {
-                Vector3 startPos = origin + new Vector3(x * GridBuildingConfig.cellSize, 0.01f, 0);
-                Vector3 endPos = origin + new Vector3(x * GridBuildingConfig.cellSize, 0.01f, height * GridBuildingConfig.cellSize);
-                Gizmos.DrawLine(startPos, endPos);
-            }
-        }*/
-        
-        /*
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.yellow;
-            float gizmoWidth = 0.5f;
-            float gizmoY = 0.01f;
-            if (GridBuildingConfig.cellSize <= 0 || width <= 0 || height <= 0) return;
-            Vector3 origin = transform.position;
-
-            // Draw horizontal lines (rows)
-            for (int y = 0; y <= height; y++)
-            {
-                Vector3 startPos = origin + new Vector3(0, gizmoY, y * GridBuildingConfig.cellSize);
-                Vector3 endPos = origin + new Vector3(width * GridBuildingConfig.cellSize, gizmoY, y * GridBuildingConfig.cellSize);
-                Vector3 center = (startPos + endPos) / 2f;
-                float length = Vector3.Distance(startPos, endPos);
-                Vector3 size = new Vector3(length, gizmoY, gizmoWidth); // X: length, Y: thin, Z: thickness
-                Quaternion rotation = Quaternion.identity; // No rotation needed for horizontal lines
-                Gizmos.matrix = Matrix4x4.TRS(center, rotation, Vector3.one);
-                Gizmos.DrawCube(Vector3.zero, size);
-                Gizmos.matrix = Matrix4x4.identity;
-            }
-
-            // Draw vertical lines (columns)
-            for (int x = 0; x <= width; x++)
-            {
-                Vector3 startPos = origin + new Vector3(x * GridBuildingConfig.cellSize, gizmoY, 0);
-                Vector3 endPos = origin + new Vector3(x * GridBuildingConfig.cellSize, gizmoY, height * GridBuildingConfig.cellSize);
-                Vector3 center = (startPos + endPos) / 2f;
-                float length = Vector3.Distance(startPos, endPos);
-                Vector3 size = new Vector3(gizmoWidth, gizmoY, length); // X: thickness, Y: thin, Z: length
-                Quaternion rotation = Quaternion.identity; // No rotation needed for vertical lines
-                Gizmos.matrix = Matrix4x4.TRS(center, rotation, Vector3.one);
-                Gizmos.DrawCube(Vector3.zero, size);
-                Gizmos.matrix = Matrix4x4.identity;
-            }
-        }
-        */
         
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.yellow;
-            float gizmoWidth = 0.5f;
-            float gizmoY = 0.01f;
+            Gizmos.color = gizmosColor;
             if (GridBuildingConfig.cellSize <= 0 || width <= 0 || height <= 0) return;
             Vector3 origin = transform.position;
         
