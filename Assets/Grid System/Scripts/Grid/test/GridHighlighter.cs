@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Collections;
 
 namespace TGL.GridSystem.Grid
 {
+    [RequireComponent(typeof(Renderer))]
     public class GridHighlighter : MonoBehaviour
     {
         /// <summary>
@@ -26,27 +28,45 @@ namespace TGL.GridSystem.Grid
         /// <summary>
         /// Reference Name of the Texture2D variable in the shader for the highlight map
         /// </summary>
-        private static readonly int HighlightMapProperty = Shader.PropertyToID("_HighlightMap");
+        private static readonly string HighlightMapPropertyName = "_HighlightMap";
+        private static readonly int HighlightMapProperty = Shader.PropertyToID(HighlightMapPropertyName);
         
-        [Space(15), Header("TEsTING")]
-        public List<Vector2Int> highlightedCells;
+        private static readonly string HighlightColorPropertyName = "_HighlightFloorColor";
+        private static readonly int HighlightColorProperty = Shader.PropertyToID(HighlightColorPropertyName);
+        
+        
+        [SerializeField] private List<Vector2Int> highlightedCells = new List<Vector2Int>();
+        [SerializeField] private Color highlightColor = Color.white; 
+        private Renderer _renderer;
 
-        void Start()
-        {
-            SetHighlightTexture();
-        }
         
-        [ContextMenu("UpdateHightlights")]
-        private void UpdateHightlights()
+        private void Awake()
         {
-            if (_highlightTex == null || gridMaterial.GetTexture(HighlightMapProperty) != _highlightTex)
+            _renderer = GetComponent(typeof(Renderer)) as Renderer;
+            if (_renderer == null)
             {
-                SetHighlightTexture();
+                Debug.LogError($"Could not find Renderer component on {gameObject.name}. Disabling GridHighlighter script.", this);
+                return;
             }
-            UpdateHighlights(highlightedCells);
+            gridMaterial = _renderer.sharedMaterial;
+            if (!gridMaterial.HasTexture(HighlightMapProperty))
+            {
+                Debug.LogError($"Could not find HighlightMap property('{HighlightMapPropertyName}') on Shader attached to {gameObject.name}", gridMaterial);
+                return;
+            }
+
+            if (!gridMaterial.HasColor(HighlightColorProperty))
+            {
+                Debug.LogError($"Could not find HighlightColor property('{HighlightColorPropertyName}') on Shader attached to {gameObject.name}", gridMaterial);
+                return;
+            }
+            else
+            {
+                highlightColor.a = 0;
+            }
         }
-        
-        private void SetHighlightTexture()
+
+        private void SetupHighlightTexture()
         {
             // Initialize texture
             _highlightTex = new Texture2D(gridSize.x, gridSize.y, TextureFormat.RGBA32, false);
@@ -57,9 +77,44 @@ namespace TGL.GridSystem.Grid
 
             // Grab the raw data pointer
             _pixelData = _highlightTex.GetRawTextureData<Color32>();
+            gridMaterial.SetColor(HighlightColorProperty, highlightColor);
+        }
+        
+        public void Setup(int width, int height)
+        {
+            gridSize = new Vector2Int(width, height);
+            UpdateHighlightTexture();
+        }
+        
+        public void SetHighlightedCells(List<Vector2Int> highlightedGridCells, Color showColor)
+        {
+            highlightedCells = highlightedGridCells;
+            highlightColor = showColor;
+            UpdateHighlightTexture();
+        }
+        
+        private void UpdateHighlightTexture()
+        {
+            if (gridSize.magnitude == 0)
+            {
+                Debug.LogError($"If grid size is not set on GridHighlighter attached to {gameObject.name}, please call Setup(width, height) before updating highlights.", this);
+                return;
+            }
+            
+            if (_highlightTex == null || gridMaterial.GetTexture(HighlightMapProperty) != _highlightTex)
+            {
+                SetupHighlightTexture();
+            }
+
+            if (gridMaterial.GetColor(HighlightColorProperty) != highlightColor)
+            {
+                gridMaterial.SetColor(HighlightColorProperty, highlightColor);
+            }
+            
+            UpdateHighlights();
         }
 
-        public void UpdateHighlights(List<Vector2Int> highlightedGridCells)
+        private void UpdateHighlights()
         {
             // 1. Clear the data (using NativeArray is very fast)
             for (int i = 0; i < _pixelData.Length; i++)
@@ -68,7 +123,7 @@ namespace TGL.GridSystem.Grid
             }
 
             // 2. Set specific cells
-            foreach (var cell in highlightedGridCells)
+            foreach (var cell in highlightedCells)
             {
                 int index = cell.y * gridSize.x + cell.x;
                 if (index >= 0 && index < _pixelData.Length)

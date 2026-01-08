@@ -122,8 +122,8 @@ namespace TGL.GridSystem.placements
             }
             else if(Input.GetMouseButtonDown(1)) // Right mouse Down 
             {
-                Destroy(buildingPreviewInstance.gameObject);
-                buildingPreviewInstance = null;
+                ClearBuildingPreview();
+                return;
             }
             
             if (Input.GetMouseButtonDown(0)) // left mouse Down
@@ -134,6 +134,7 @@ namespace TGL.GridSystem.placements
                     // place the building
                     Debug.Log($"Placing the building at - preview pos: {buildingPreviewInstance.transform.position}");
                     PlaceBuilding(buildPositions);
+                    return;
                 }
                 else
                 {
@@ -150,8 +151,14 @@ namespace TGL.GridSystem.placements
             Building building = Instantiate(buildingPrefab, buildingPreviewInstance.transform.position, buildingPreviewInstance.transform.rotation);
             building.Setup(buildingPreviewInstance.Data, Mathf.RoundToInt(buildingPreviewInstance.Model.RotationY));
             buildingGrid.SetBuilding(building, buildPosition);
+            ClearBuildingPreview();
+        }
+
+        private void ClearBuildingPreview()
+        {
             Destroy(buildingPreviewInstance.gameObject);
             buildingPreviewInstance = null;
+            buildingGrid.ClearHighlighter();
         }
         
         private void OnDrawGizmos()

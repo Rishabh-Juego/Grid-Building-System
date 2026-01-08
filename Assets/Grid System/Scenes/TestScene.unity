@@ -165,8 +165,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 20
   height: 20
+  gridHighlighter: {fileID: 1630769357}
+  gridHighlighterPositive: {r: 0, g: 1, b: 0.016897917, a: 0.99215686}
+  gridHighlighterNegative: {r: 1, g: 0.40390226, b: 0.031372547, a: 0.95686275}
   gizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 0.5372549}
-  gizmoWidth: 0.1
+  gizmoWidth: 0
   gizmoY: 0.01
 --- !u!1 &283402659
 GameObject:
@@ -792,6 +795,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1288985078}
+  - {fileID: 1630769356}
   - {fileID: 559925503}
   - {fileID: 826721477}
   m_Father: {fileID: 0}
@@ -810,7 +814,7 @@ GameObject:
   - component: {fileID: 1630769353}
   - component: {fileID: 1630769357}
   m_Layer: 0
-  m_Name: Visible Grid-Plane (1)
+  m_Name: Visible Grid-Plane - With highlight cells
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -904,7 +908,7 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1462247124}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1630769357
 MonoBehaviour:
@@ -920,12 +924,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridMaterial: {fileID: 2100000, guid: fdab6fc3a234e44c7842263de7c86ad3, type: 2}
   gridSize: {x: 20, y: 20}
-  highlightedCells:
-  - {x: 0, y: 0}
-  - {x: 19, y: 19}
-  - {x: 2, y: 0}
-  - {x: 3, y: 1}
-  - {x: 3, y: 3}
+  highlightedCells: []
+  highlightColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1824435750
 GameObject:
   m_ObjectHideFlags: 0
@@ -1167,4 +1167,3 @@ SceneRoots:
   - {fileID: 1462247124}
   - {fileID: 16633523}
   - {fileID: 1150820135}
-  - {fileID: 1630769356}

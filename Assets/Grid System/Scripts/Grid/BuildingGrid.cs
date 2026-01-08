@@ -29,6 +29,10 @@ namespace TGL.GridSystem.Grid
         /// </summary>
         private BuildingGridCell[,] grid;
         
+        [Space(15),Header("Highlighter"), SerializeField] private GridHighlighter gridHighlighter;
+        [SerializeField] private Color gridHighlighterPositive;
+        [SerializeField] private Color gridHighlighterNegative;
+        
         #if UNITY_EDITOR
         [Space(15), Header("Gizmos Settings")]
         public Color gizmosColor = Color.yellow;
@@ -46,6 +50,7 @@ namespace TGL.GridSystem.Grid
                     grid[x, y] = new BuildingGridCell();
                 }
             }
+            gridHighlighter.Setup(width, height);
         }
         
         /// <summary>
@@ -76,12 +81,14 @@ namespace TGL.GridSystem.Grid
                 // Check if the position is within bounds
                 if (gridPosition.x < 0 || gridPosition.x >= width || gridPosition.y < 0 || gridPosition.y >= height)
                 {
+                    SetAllCellsInHighlighter(allBuildingPositions, false);
                     return false; // Out of grid bounds
                 }
                 
                 // Check if the cell is already occupied
                 if (!grid[gridPosition.x, gridPosition.y].IsEmpty())
                 {
+                    SetAllCellsInHighlighter(allBuildingPositions, false);
                     return false; // Cell is occupied
                 }
             }
@@ -91,10 +98,10 @@ namespace TGL.GridSystem.Grid
                 Debug.Log($"Checked positions are valid and unoccupied." + string.Join(", ", allBuildingPositions.Select(pos => $"({pos.x:00}, {pos.y:00}, {pos.z:00})")));
                 Debug.Log($"The Grid Positions are: " + string.Join(", ", allBuildingPositions.Select(pos => $"({WorldToGridPosition(pos).x}, {WorldToGridPosition(pos).y})")));
             }
-            
+            SetAllCellsInHighlighter(allBuildingPositions, true);
             return true; // All positions are valid and unoccupied
         }
-        
+
         /// <summary>
         /// Saves an instantiated building into the grid cells
         /// </summary>
@@ -107,6 +114,19 @@ namespace TGL.GridSystem.Grid
                 Vector2Int gridPosition = WorldToGridPosition(position);
                 grid[gridPosition.x, gridPosition.y].SetBuilding(building);
             }
+        }
+        
+        private void SetAllCellsInHighlighter(List<Vector3> allBuildingPositions, bool canBuild)
+        {
+            List<Vector2Int> allCellPositions = allBuildingPositions.Select(worldPos => WorldToGridPosition(worldPos)).ToList();
+            allCellPositions = allCellPositions.Where(gridPos => gridPos.x < width && gridPos.y < height && gridPos.x >= 0 && gridPos.y >= 0).ToList();
+            
+            gridHighlighter.SetHighlightedCells(allCellPositions, canBuild ? gridHighlighterPositive : gridHighlighterNegative);
+        }
+        
+        public void ClearHighlighter()
+        {
+            gridHighlighter.SetHighlightedCells(new List<Vector2Int>(), gridHighlighterPositive);
         }
         
         private void OnDrawGizmos()

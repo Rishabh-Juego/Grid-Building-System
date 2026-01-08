@@ -61,7 +61,7 @@ Material:
     m_Colors:
     - _CellsCoveredInUnitScale: {r: 2, g: 2, b: 0, a: 0}
     - _GridColor: {r: 0.5144545, g: 0.13725483, b: 0.945098, a: 1}
-    - _HighlightFloorColor: {r: 0.19134912, g: 0.24077854, b: 0.9433962, a: 1}
+    - _HighlightFloorColor: {r: 0, g: 1, b: 0.016897917, a: 0.99215686}
     - _HighlightLineColor: {r: 1, g: 1, b: 1, a: 0.9843137}
     - _NumberOfCellsInEachGrid: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
