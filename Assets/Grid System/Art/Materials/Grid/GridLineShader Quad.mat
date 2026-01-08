@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_GridShader Test
+  m_Name: GridLineShader Quad
   m_Shader: {fileID: -6465566751694194690, guid: 79d995be683944278a07bc9861026c41, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

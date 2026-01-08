@@ -90,7 +90,7 @@ Placement:
 ## Shaders
 we are using "Shader Graph"(`com.unity.shadergraph`) to create shaders for grid using the sample "Procedural Patterns" from Unity which has "Grid" Node.
 Assuming you have a fixed size grid, we now design a shader graph to let us make the grid visible to the user using a plane/quad in 3d objects.
-**Create** -> **Shader Graph** -> **URP** -> **Unlit Shader Graph** -> name it ["GridShader"](Assets/Grid System/Art/Shaders/GridShader.shadergraph):
+**Create** -> **Shader Graph** -> **URP** -> **Unlit Shader Graph** -> name it ["GridLineShader"](Assets/Grid System/Art/Shaders/GridLineShader.shadergraph):
 - Add "Grid" Node - This allows us to define the Grid size, the number of lines in x and y(tiling) and offset(if needed)
 - output of "Grid" goes to "One Minus" node, allowing us to get all lines without any cell data.
 - **Graph inspector** -> **Graph Setting** -> **Surface type** -> *Transparent* -> this allows us to set the mode to transparent
