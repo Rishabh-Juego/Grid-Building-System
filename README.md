@@ -115,7 +115,7 @@ Assuming you have a fixed size grid, we now design a shader graph to let us make
     - so for thickness, thickness of line is opposite of the cell size, so in "Grid" node, we need the difference between 1 and thickness to get the cell thickness which equates to line thickness. To do this, we use "One Minus" node with 'Thickness' and push this to "Grid" node's *Size* channel.
     - For Color, want the color to be the 'GridColor' which is then passed to "Multiply" node along with the output of the "Grid"->"One Minus"'s output channel, this gives the same output but colored in 'GridColor' which can then be passed to "Fragment" node's *Base Color* channel.
 
-This concludes the shader graph for grid visualization, I have renamed the variables in the shader graph to match the funtionality for better understanding, you can use any other name if needed.
-
+Following this, I have added feature to allow us to highlight specific cells on the grid using another shader graph called "GridHightableShader"(Assets/Grid System/Art/Shaders/GridHightableShader.shadergraph). 
+Now the system can be considered complete for basic grid building functionality.
 
 
